@@ -17,6 +17,8 @@ cube_path = osp.join(dir, "cube")
 
 if not cube_path:
     raise ValueError("cube executable not found")
+else:
+    print(f"cube executable found at {cube_path}")
 
 
 @app.route("/")
