@@ -14,6 +14,9 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 dir = os.path.dirname(__file__)
 
+if not osp.exists(osp.join(dir, "cube")):
+    raise ValueError("cube executable not found")
+
 
 @app.route("/")
 def index():
