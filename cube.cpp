@@ -514,7 +514,12 @@ int main(int argc, char const* argv[]) {
         return 1;
     }
     init();
-    CubeSolver::input(argv[1]);
-    CubeSolver::input_actions(argv[2]);
-    CubeSolver::print(argv[3], CubeSolver::sfs);
+    try {
+        CubeSolver::input(argv[1]);
+        CubeSolver::input_actions(argv[2]);
+        CubeSolver::print(argv[3], CubeSolver::sfs);
+    } catch (const char* e) {
+        freopen(argv[3], "w", stdout);
+        cout << e << endl;
+    }
 }
