@@ -19,6 +19,12 @@ pip install gevent
 python app.py --host 0.0.0.0 --port 8123 --wsgi
 ```
 
+~~快速上线~~
+
+```bash
+nohup python app.py --host 0.0.0.0 --port 8123 --wsgi &
+```
+
 ## 其他可能有用的东西
 
 ### systemd 服务文件
