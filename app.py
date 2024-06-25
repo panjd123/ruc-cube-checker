@@ -4,12 +4,15 @@ import os
 import uuid
 import shutil
 import argparse
+import os.path as osp
 
 app = Flask(__name__)
 UPLOAD_FOLDER = "uploads"
 
 # 确保上传文件夹存在
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+dir = os.path.dirname(__file__)
 
 
 @app.route("/")
@@ -35,7 +38,7 @@ def upload_files():
     output_file.save(output_path)
 
     # 假设 `cube` 命令可用并且在 PATH 中
-    subprocess.run(["cube", input_path, output_path, result_path])
+    subprocess.run([osp.join(dir, "cube"), input_path, output_path, result_path])
 
     # 读取并返回 result.txt 的内容
     with open(result_path, "r") as file:
