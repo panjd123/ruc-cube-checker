@@ -12,7 +12,7 @@ UPLOAD_FOLDER = "uploads"
 # 确保上传文件夹存在
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-dir = os.path.dirname(__file__)
+dir = os.path.dirname(osp.abspath(__file__))
 cube_path = osp.join(dir, "cube")
 
 if not cube_path:
