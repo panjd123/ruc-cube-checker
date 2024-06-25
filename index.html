@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Rubik's Cube Solver</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 700px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="file"] {
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        h2 {
+            margin-top: 30px;
+            font-size: 20px;
+        }
+
+        pre {
+            background-color: #f0f0f0;
+            padding: px;
+            border-radius: 5px;
+            text-align: left;
+            white-space: pre-wrap;
+            /* 处理文本换行 */
+            max-height: 500px;
+            /* 设置最大高度 */
+            overflow-y: auto;
+            /* 当内容超出高度时显示滚动条 */
+            margin-bottom: 0px;
+            /* 底部留出空白 */
+        }
+
+        .file-content {
+            margin-bottom: 10px;
+        }
+
+        .content-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .usage-instructions {
+            text-align: left;
+            font-style: italic;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Rubik's Cube Solver</h1>
+        <div class="content-wrapper">
+            <div class="file-content">
+                <h2>Initial Cube State:</h2>
+                <pre id="inputFileContent"></pre>
+            </div>
+            <div class="file-content">
+                <h2>Restored Cube State:</h2>
+                <pre id="resultContent"></pre>
+            </div>
+        </div>
+        <div class="file-content">
+            <h2>Solution Steps:</h2>
+            <pre id="outputFileContent"></pre>
+        </div>
+        <form id="fileForm" enctype="multipart/form-data">
+            <label for="inputFile">Upload Initial Cube State:</label>
+            <input type="file" id="inputFile" name="inputFile" required>
+            <br>
+            <label for="outputFile">Upload Solution Steps:</label>
+            <input type="file" id="outputFile" name="outputFile" required>
+            <br><br>
+            <button type="submit">开始</button>
+        </form>
+        <div class="usage-instructions">
+            <p>示例：你可以分别把分发的材料里的 input.txt 和 output.txt 上传，然后点击开始。</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('fileForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            let formData = new FormData();
+            let inputFile = document.getElementById('inputFile').files[0];
+            let outputFile = document.getElementById('outputFile').files[0];
+
+            formData.append('inputFile', inputFile);
+            formData.append('outputFile', outputFile);
+
+            let inputFileReader = new FileReader();
+            let outputFileReader = new FileReader();
+
+            inputFileReader.onload = function () {
+                document.getElementById('inputFileContent').innerText = inputFileReader.result;
+            };
+
+            outputFileReader.onload = function () {
+                document.getElementById('outputFileContent').innerText = outputFileReader.result;
+            };
+
+            inputFileReader.readAsText(inputFile);
+            outputFileReader.readAsText(outputFile);
+
+            let response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                let result = await response.text();
+                document.getElementById('resultContent').innerText = result;
+            } else {
+                alert('计算失败，请检查上传的文件格式是否正确，是否包含中文，或者联系管理员。');
+            }
+        });
+    </script>
+</body>
+
+</html>
